@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10091f">
+<title>Bubbles Clinical Life 2.1</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+:root{--bg:#0b0714;--panel:rgba(31,20,54,.72);--panel2:rgba(43,27,72,.7);--line:rgba(190,145,255,.18);--purple:#a970ff;--pink:#ed8cff;--text:#f6efff;--muted:#b7a9ca;--green:#75e6bd;--red:#ff829e;--shadow:0 18px 50px rgba(0,0,0,.28)}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#281344 0,transparent 38%),radial-gradient(ellipse at 95% 30%,#211039 0,transparent 35%),var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',system-ui,sans-serif;min-height:100vh}
+button,input,select,textarea{font:inherit}button{cursor:pointer;color:inherit}.app{display:grid;grid-template-columns:245px minmax(0,1fr);min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;padding:24px 16px;border-right:1px solid var(--line);background:rgba(13,8,25,.76);backdrop-filter:blur(18px);display:flex;flex-direction:column;z-index:5}
+.brand{display:flex;align-items:center;gap:11px;padding:4px 9px 25px}.brand-mark{width:42px;height:42px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#8e54e9,#ed8cff);box-shadow:0 0 24px #a970ff66;font-size:21px}.brand h1{font-size:15px;margin:0;font-weight:800}.brand small{display:block;color:var(--muted);font-size:10px;margin-top:3px;letter-spacing:1.2px}
+.nav-label{font-size:10px;color:#8f7ca9;letter-spacing:1.6px;padding:14px 12px 8px}.nav{display:grid;gap:6px}.nav button{border:1px solid transparent;background:transparent;text-align:left;padding:11px 12px;border-radius:13px;color:var(--muted);display:flex;align-items:center;gap:12px;font-size:12px;font-weight:700;transition:.2s}.nav button:hover,.nav button.active{background:linear-gradient(100deg,#8d50d82c,#d17bff12);border-color:#b77cff35;color:white}.nav .ico{width:20px;text-align:center;font-size:16px}.side-bottom{margin-top:auto;border:1px solid var(--line);background:var(--panel);border-radius:17px;padding:13px}.side-bottom strong{font-size:12px}.side-bottom p{font-size:10px;color:var(--muted);line-height:1.6;margin:7px 0 0}
+.main{min-width:0;padding:25px clamp(15px,3vw,38px) 55px;max-width:1500px;width:100%;margin:auto}.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:25px}.welcome small{color:var(--pink);font-size:10px;font-weight:800;letter-spacing:1.8px}.welcome h2{font-size:clamp(20px,3vw,28px);margin:5px 0 0}.clock{position:relative;text-align:center;min-width:190px;padding:12px 17px 11px;border:1px solid transparent;border-radius:18px;background:linear-gradient(135deg,rgba(34,18,58,.96),rgba(19,12,34,.96)) padding-box,linear-gradient(120deg,#b77cff,#ef8cff,#7650d8) border-box;box-shadow:0 0 0 1px #b77cff12,0 8px 28px #9b5bdb25,inset 0 0 22px #a66af311;overflow:hidden}.clock:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 15%,#ffffff0c 48%,transparent 75%);pointer-events:none}.clock span{display:flex;justify-content:center;align-items:center;gap:6px;font-size:9px;color:#d8baff;letter-spacing:1.7px;font-weight:800}.clock span:before{content:"●";font-size:7px;color:#79f0c1;text-shadow:0 0 9px #79f0c1}.clock strong{display:block;font-size:clamp(23px,3vw,29px);line-height:1.35;letter-spacing:2px;font-weight:800;font-variant-numeric:tabular-nums;background:linear-gradient(90deg,#fff,#d9b7ff,#ffb5f2);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 20px #b77cff35}.clock small{display:inline-block;margin-top:4px;padding:4px 9px;border-radius:20px;background:#b77cff18;color:#d7c1ef;font-size:9px;letter-spacing:.5px}
+.page{display:none;animation:fade .25s ease}.page.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.hero{position:relative;overflow:hidden;border:1px solid #c18aff35;border-radius:24px;padding:25px;background:linear-gradient(115deg,#3a1c62dd,#1c1235ee 60%,#30194d);box-shadow:var(--shadow);margin-bottom:18px}.hero:after{content:"✦";position:absolute;right:7%;top:-35px;font-size:150px;color:#e6c1ff12}.hero small{color:#e4c2ff;font-weight:800;letter-spacing:1.7px;font-size:10px}.hero h3{font-size:clamp(21px,3vw,30px);margin:9px 0}.hero p{max-width:570px;color:#d4c4e8;font-size:12px;line-height:1.8;margin:0}.hero-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}
+.btn{border:1px solid #c69aff4a;background:#a66af32b;border-radius:12px;padding:10px 14px;font-size:11px;font-weight:800;transition:.2s}.btn:hover{background:#a66af355;transform:translateY(-1px)}.btn.primary{background:linear-gradient(110deg,#9254e8,#c66ce9);border:0;color:white;box-shadow:0 6px 20px #9c5be744}.btn.ghost{background:transparent}.btn.danger{color:#ff9bb0;border-color:#ff829e55;background:#ff829e12}.btn.small{padding:7px 10px;font-size:10px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:17px 0}.stat,.panel,.weather-card,.shortcut{background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);backdrop-filter:blur(14px)}.stat{padding:16px}.stat span{font-size:10px;color:var(--muted)}.stat strong{display:block;font-size:24px;margin:7px 0 3px}.stat small{font-size:9px;color:#c8b4df}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:25px 0 12px}.section-head h3{font-size:15px;margin:0}.section-head p{font-size:10px;color:var(--muted);margin:4px 0 0}.shortcut-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.shortcut{padding:14px;text-align:left;cursor:pointer;transition:.2s}.shortcut:hover{border-color:#c58cff88;transform:translateY(-2px)}.shortcut-icon{width:34px;height:34px;border-radius:12px;background:#a66af32b;display:grid;place-items:center;font-size:17px;margin-bottom:10px}.shortcut strong{font-size:11px;display:block}.shortcut small{font-size:9px;color:var(--muted)}
+.grid-2{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.panel{padding:17px;min-width:0}.panel h3{font-size:13px;margin:0 0 13px}.muted{color:var(--muted)}.tiny{font-size:10px}.weather-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;margin:15px 0;background:linear-gradient(110deg,#291a47c9,#21132fc9)}.weather-place{font-size:9px;letter-spacing:1.3px;color:var(--muted);font-weight:800}.weather-temp{font-size:25px;font-weight:800;margin:4px 0}.weather-info{font-size:10px;color:var(--muted)}.weather-icon{font-size:34px}.weather-refresh{border:1px solid var(--line);background:#ffffff0b;border-radius:10px;padding:7px 10px}
+.list{display:grid;gap:8px}.list-item{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px;border:1px solid #ffffff0d;background:#ffffff06;border-radius:12px}.list-item strong{font-size:11px}.list-item small{display:block;color:var(--muted);font-size:9px;margin-top:4px}.tag{font-size:9px;padding:5px 8px;border-radius:30px;background:#a66af329;color:#e5caff;white-space:nowrap}.empty{padding:20px;text-align:center;color:var(--muted);font-size:11px;border:1px dashed var(--line);border-radius:13px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.field{display:grid;gap:6px;margin-bottom:10px}.field label{font-size:10px;color:var(--muted);font-weight:700}.field input,.field select,.field textarea,input,select,textarea{width:100%;min-width:0;background:#120b20;border:1px solid #b88be52c;border-radius:10px;padding:10px;color:var(--text);outline:none;font-size:11px}.field textarea{min-height:100px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#b77cff}.form-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:7px}
+.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:10px}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid #ffffff12;white-space:nowrap}th{color:var(--muted);font-weight:700}
+.progress{height:7px;background:#ffffff12;border-radius:20px;overflow:hidden;margin-top:8px}.progress span{display:block;height:100%;background:linear-gradient(90deg,#8e5ae8,#ed8cff);border-radius:20px}
+.timer{text-align:center;padding:20px}.timer-display{font-size:clamp(45px,9vw,72px);font-weight:800;letter-spacing:2px;text-shadow:0 0 25px #b77cff77;margin:15px 0}.timer-ring{width:min(230px,65vw);height:min(230px,65vw);border-radius:50%;border:7px solid #b77cff33;display:grid;place-items:center;margin:12px auto;background:radial-gradient(circle,#321b50,#160d25);box-shadow:0 0 35px #a66af322}.timer-controls{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.note-card{padding:13px;border:1px solid var(--line);border-radius:13px;background:#ffffff06}.note-card h4{margin:0 0 6px;font-size:12px}.note-card p{white-space:pre-wrap;font-size:10px;line-height:1.6;color:var(--muted);margin:0 0 10px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#291b40;border:1px solid #c69aff66;border-radius:12px;padding:11px 16px;font-size:11px;box-shadow:var(--shadow);z-index:20;transition:.25s;max-width:90vw;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}
+.mobile-nav{display:none}.footer{text-align:center;color:#806d99;font-size:9px;margin:35px 0 0}
+@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{display:none}.main{padding:17px 14px 90px}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:10;justify-content:space-around;gap:3px;padding:8px 5px calc(8px + env(safe-area-inset-bottom));background:#10091feF;border-top:1px solid var(--line);backdrop-filter:blur(18px)}.mobile-nav button{border:0;background:none;color:var(--muted);font-size:9px;display:grid;justify-items:center;gap:3px;padding:5px 7px}.mobile-nav button.active{color:#e4c2ff}.mobile-nav span{font-size:17px}}
+@media(max-width:600px){.topbar{align-items:center}.clock{min-width:145px;padding:9px 10px;border-radius:15px}.clock strong{font-size:21px;letter-spacing:1.4px}.clock span{font-size:8px;letter-spacing:1px}.clock small{font-size:8px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-2{grid-template-columns:1fr}.hero{padding:20px}.form-grid{grid-template-columns:1fr}.section-head{margin-top:20px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="brand-mark">🦋</div><div><h1>BUBBLES CLINICAL LIFE</h1><small>STUDENT SPACE · V2.1</small></div></div>
+  <div class="nav-label">WORKSPACE</div>
+  <nav class="nav" id="sideNav">
+    <button class="active" data-page="dashboard"><span class="ico">⌂</span>Dashboard</button>
+    <button data-page="study"><span class="ico">📚</span>Study planner</button>
+    <button data-page="timetable"><span class="ico">🗓️</span>Timetable</button>
+    <button data-page="calendar"><span class="ico">📅</span>Smart calendar</button>
+    <button data-page="assignments"><span class="ico">📝</span>Assignments</button>
+    <button data-page="gpa"><span class="ico">🎓</span>GPA calculator</button>
+    <button data-page="focus"><span class="ico">⏱️</span>Focus timer</button>
+    <button data-page="notes"><span class="ico">📓</span>My notes</button>
+    <button data-page="health"><span class="ico">🌿</span>Health & wellness</button>
+    <button data-page="reports"><span class="ico">📊</span>Weekly reports</button>
+    <button data-page="settings"><span class="ico">⚙️</span>Settings</button>
+  </nav>
+  <div class="side-bottom"><strong>✦ Keep moving forward</strong><p>Small, consistent study sessions build strong clinical knowledge.</p></div>
+</aside>
+
+<main class="main">
+<header class="topbar">
+  <div class="welcome"><small>YOUR PERSONAL STUDY SPACE</small><h2 id="pageHeading">Welcome back ✨</h2></div>
+  <div class="clock"><span>ZANZIBAR · LIVE TIME</span><strong id="clock">00:00:00</strong><small id="todayDate">Loading date…</small></div>
+</header>
+
+<section class="page active" id="page-dashboard">
+  <div class="hero"><small>YOUR CLINICAL JOURNEY · VERSION 2.1</small><h3>Learn with purpose. Grow with confidence.</h3><p>A calm space to organise your Clinical Medicine studies, track your progress and take care of yourself along the way.</p><div class="hero-actions"><button class="btn primary" data-go="study">＋ Plan study session</button><button class="btn ghost" id="heroNotify">🔔 Enable reminders</button></div></div>
+  <div class="stats">
+    <div class="stat"><span>Pending assignments</span><strong id="statAssignments">0</strong><small>Tasks to complete</small></div>
+    <div class="stat"><span>Study sessions</span><strong id="statSessions">0</strong><small>Completed focus sessions</small></div>
+    <div class="stat"><span>Saved notes</span><strong id="statNotes">0</strong><small>Your learning library</small></div>
+    <div class="stat"><span>Current GPA</span><strong id="statGpa">—</strong><small>Based on entered courses</small></div>
+  </div>
+  <div class="weather-card"><div><div class="weather-place">📍 ZANZIBAR WEATHER</div><div class="weather-temp" id="weatherTemp">--°C</div><div class="weather-info" id="weatherDescription">Weather needs internet</div><div class="weather-info" id="weatherExtra">Zanzibar town forecast</div></div><div class="weather-icon" id="weatherIcon">🌤️</div><button class="weather-refresh" id="refreshWeather" title="Refresh weather">↻</button></div>
+  <div class="section-head"><div><h3>Quick access</h3><p>Your important tools in one place</p></div></div>
+  <div class="shortcut-grid">
+    <button class="shortcut" data-go="gpa"><div class="shortcut-icon">🎓</div><strong>GPA Calculator</strong><small>Track grades</small></button>
+    <button class="shortcut" data-go="assignments"><div class="shortcut-icon">📝</div><strong>Assignments</strong><small>Manage deadlines</small></button>
+    <button class="shortcut" data-go="focus"><div class="shortcut-icon">⏱️</div><strong>Focus Timer</strong><small>Study deeply</small></button>
+    <button class="shortcut" data-go="notes"><div class="shortcut-icon">📓</div><strong>My Notes</strong><small>Save key points</small></button>
+    <button class="shortcut" data-go="calendar"><div class="shortcut-icon">📅</div><strong>Calendar</strong><small>Plan your days</small></button>
+    <button class="shortcut" data-go="study"><div class="shortcut-icon">📚</div><strong>Study Planner</strong><small>Plan revision</small></button>
+    <button class="shortcut" data-go="health"><div class="shortcut-icon">🌿</div><strong>Wellness</strong><small>Daily habits</small></button>
+    <button class="shortcut" data-go="reports"><div class="shortcut-icon">📊</div><strong>Reports</strong><small>See progress</small></button>
+  </div>
+  <div class="grid-2">
+    <div><div class="section-head"><h3>Upcoming assignments</h3><button class="btn small" data-go="assignments">View all</button></div><div class="panel"><div class="list" id="dashboardAssignments"></div></div></div>
+    <div><div class="section-head"><h3>Today's focus</h3></div><div class="panel"><p class="muted tiny">A little progress is still progress.</p><div id="todayFocus" class="list"></div><button class="btn primary" style="margin-top:12px" data-go="focus">Start focus timer</button></div></div>
+  </div>
+</section>
+
+<section class="page" id="page-study">
+  <div class="section-head"><div><h3>Study planner</h3><p>Organise the topics you want to revise.</p></div></div>
+  <div class="panel"><form id="studyForm"><div class="form-grid"><div class="field"><label>Subject</label><input id="studySubject" required placeholder="e.g. Human Anatomy"></div><div class="field"><label>Topic / task</label><input id="studyTopic" required placeholder="e.g. Cell structure"></div><div class="field"><label>Study date</label><input id="studyDate" type="date" required></div><div class="field"><label>Duration (minutes)</label><input id="studyDuration" type="number" min="5" value="60" required></div></div><div class="form-actions"><button class="btn primary">＋ Add study task</button></div></form></div>
+  <div class="section-head"><h3>Your study tasks</h3><span class="tag" id="studyCount">0 tasks</span></div><div class="panel"><div class="list" id="studyList"></div></div>
+</section>
+
+<section class="page" id="page-timetable">
+  <div class="section-head"><div><h3>Weekly timetable</h3><p>Add or manage your class schedule.</p></div></div>
+  <div class="panel"><form id="classForm"><div class="form-grid"><div class="field"><label>Day</label><select id="classDay"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></div><div class="field"><label>Subject / class</label><input id="className" required placeholder="e.g. Microbiology"></div><div class="field"><label>Start time</label><input id="classStart" type="time" required></div><div class="field"><label>End time</label><input id="classEnd" type="time" required></div></div><button class="btn primary">＋ Add class</button></form></div>
+  <div class="section-head"><h3>Class schedule</h3></div><div class="panel table-wrap"><table><thead><tr><th>Day</th><th>Class</th><th>Time</th><th>Action</th></tr></thead><tbody id="timetableBody"></tbody></table></div>
+</section>
+
+<section class="page" id="page-calendar">
+  <div class="section-head"><div><h3>Smart calendar</h3><p>Add exams, tests, appointments and important dates.</p></div></div>
+  <div class="panel"><form id="eventForm"><div class="form-grid"><div class="field"><label>Event title</label><input id="eventTitle" required placeholder="e.g. Microbiology CAT 1"></div><div class="field"><label>Date</label><input id="eventDate" type="date" required></div><div class="field"><label>Time (optional)</label><input id="eventTime" type="time"></div><div class="field"><label>Type</label><select id="eventType"><option>Study</option><option>Test / Exam</option><option>Assignment</option><option>Personal</option></select></div></div><button class="btn primary">＋ Add event</button></form></div>
+  <div class="section-head"><h3>Upcoming events</h3></div><div class="panel"><div class="list" id="eventList"></div></div>
+</section>
+
+<section class="page" id="page-assignments">
+  <div class="section-head"><div><h3>Assignment manager</h3><p>Keep track of work and due dates.</p></div></div>
+  <div class="panel"><form id="assignmentForm"><div class="form-grid"><div class="field"><label>Assignment title</label><input id="assignmentTitle" required placeholder="e.g. Explain bilirubin metabolism"></div><div class="field"><label>Subject</label><input id="assignmentSubject" required placeholder="e.g. Physiology"></div><div class="field"><label>Due date</label><input id="assignmentDue" type="date" required></div><div class="field"><label>Priority</label><select id="assignmentPriority"><option>Normal</option><option>High</option><option>Urgent</option></select></div></div><button class="btn primary">＋ Add assignment</button></form></div>
+  <div class="section-head"><h3>All assignments</h3><span class="tag" id="assignmentCount">0 tasks</span></div><div class="panel"><div class="list" id="assignmentList"></div></div>
+</section>
+
+<section class="page" id="page-gpa">
+  <div class="section-head"><div><h3>GPA calculator</h3><p>Enter course grades and credits to estimate your GPA.</p></div></div>
+  <div class="panel"><form id="gpaForm"><div class="form-grid"><div class="field"><label>Course / subject</label><input id="courseName" required placeholder="e.g. Human Anatomy"></div><div class="field"><label>Grade point</label><select id="coursePoint"><option value="5">A · 5 points</option><option value="4">B · 4 points</option><option value="3">C · 3 points</option><option value="2">D · 2 points</option><option value="1">E · 1 point</option><option value="0">F · 0 points</option></select></div><div class="field"><label>Credits</label><input id="courseCredits" type="number" min="1" step="1" value="3" required></div></div><button class="btn primary">＋ Add course</button></form></div>
+  <div class="panel" style="margin-top:14px"><div class="section-head" style="margin-top:0"><h3>Estimated GPA</h3><strong id="gpaValue" style="font-size:25px">—</strong></div><p class="muted tiny" id="gpaExplain">GPA = total (grade point × credits) ÷ total credits.</p><div class="table-wrap"><table><thead><tr><th>Course</th><th>Grade point</th><th>Credits</th><th>Action</th></tr></thead><tbody id="gpaBody"></tbody></table></div></div>
+</section>
+
+<section class="page" id="page-focus">
+  <div class="section-head"><div><h3>Focus timer</h3><p>Try a focused session, then take a short break.</p></div></div>
+  <div class="panel timer"><div class="tag" id="timerMode">FOCUS SESSION</div><div class="timer-ring"><div><div class="timer-display" id="timerDisplay">25:00</div><div class="muted tiny">minutes : seconds</div></div></div><div class="form-grid" style="max-width:340px;margin:0 auto"><div class="field"><label>Focus minutes</label><input id="focusMinutes" type="number" min="1" max="180" value="25"></div><div class="field"><label>Break minutes</label><input id="breakMinutes" type="number" min="1" max="60" value="5"></div></div><div class="timer-controls"><button class="btn primary" id="timerStart">▶ Start</button><button class="btn" id="timerPause">Ⅱ Pause</button><button class="btn ghost" id="timerReset">↺ Reset</button><button class="btn" id="timerSwitch">☕ Break</button></div><p class="muted tiny" id="timerMessage">Put distractions aside and focus on one task.</p></div>
+</section>
+
+<section class="page" id="page-notes">
+  <div class="section-head"><div><h3>My notes</h3><p>Save definitions, key points and revision notes.</p></div></div>
+  <div class="panel"><form id="noteForm"><div class="field"><label>Note title</label><input id="noteTitle" required placeholder="e.g. Functions of red blood cells"></div><div class="field"><label>Subject</label><input id="noteSubject" placeholder="e.g. Physiology"></div><div class="field"><label>Note content</label><textarea id="noteContent" required placeholder="Write your key points here..."></textarea></div><button class="btn primary">＋ Save note</button></form></div>
+  <div class="section-head"><h3>Saved notes</h3><span class="tag" id="noteCount">0 notes</span></div><div class="grid-2" id="notesList"></div>
+</section>
+
+<section class="page" id="page-health">
+  <div class="section-head"><div><h3>Health & wellness</h3><p>Gentle daily check-ins for your wellbeing.</p></div></div>
+  <div class="grid-2">
+    <div class="panel"><h3>💧 Water tracker</h3><p class="muted tiny">Glasses of water today</p><div style="display:flex;align-items:center;gap:12px"><strong id="waterCount" style="font-size:35px">0</strong><span class="muted tiny">glasses</span></div><div class="progress"><span id="waterProgress" style="width:0%"></span></div><div class="form-actions"><button class="btn primary" id="waterAdd">＋ Add glass</button><button class="btn" id="waterReset">Reset today</button></div></div>
+    <div class="panel"><h3>🌙 Sleep tracker</h3><div class="field"><label>Hours slept last night</label><input id="sleepHours" type="number" min="0" max="24" step=".5" placeholder="e.g. 7.5"></div><button class="btn primary" id="saveSleep">Save sleep</button><p class="muted tiny" id="sleepSaved">No sleep entry today.</p></div>
+    <div class="panel"><h3>🌸 Mood check-in</h3><div class="field"><label>How are you feeling today?</label><select id="moodSelect"><option>Good</option><option>Calm</option><option>Motivated</option><option>Tired</option><option>Stressed</option><option>Low</option></select></div><button class="btn primary" id="saveMood">Save mood</button><p class="muted tiny" id="moodSaved">No mood entry today.</p></div>
+    <div class="panel"><h3>🌱 A gentle reminder</h3><p class="muted tiny" style="line-height:1.8">Rest is part of learning. Take breaks, eat regular meals, drink water and ask for support when you need it. Your wellbeing matters.</p></div>
+  </div>
+</section>
+
+<section class="page" id="page-reports">
+  <div class="section-head"><div><h3>Weekly reports</h3><p>A simple overview of the progress recorded in this app.</p></div></div>
+  <div class="stats"><div class="stat"><span>Completed study tasks</span><strong id="reportStudy">0</strong></div><div class="stat"><span>Focus sessions</span><strong id="reportFocus">0</strong></div><div class="stat"><span>Assignments completed</span><strong id="reportAssignments">0</strong></div><div class="stat"><span>Notes created</span><strong id="reportNotes">0</strong></div></div>
+  <div class="panel"><h3>Progress summary</h3><p class="muted tiny" id="reportSummary">Your activity will appear here as you use the app.</p><div class="progress"><span id="reportProgress" style="width:0%"></span></div></div>
+</section>
+
+<section class="page" id="page-settings">
+  <div class="section-head"><div><h3>Settings & personalisation</h3><p>Manage notifications and protect your saved data.</p></div></div>
+  <div class="grid-2">
+    <div class="panel"><h3>🔔 Browser notifications</h3><p class="muted tiny" id="notificationStatus">Check notification permission.</p><div class="form-actions"><button class="btn primary" id="enableNotifications">Enable notifications</button><button class="btn" id="testNotification">Send test notification</button></div><p class="muted tiny" style="line-height:1.7;margin-top:12px">Reminders are checked while this app is open in Chrome. Your browser must allow notifications.</p></div>
+    <div class="panel"><h3>💾 Backup & restore</h3><p class="muted tiny">Download a backup of your assignments, notes, courses and other saved data. Keep it somewhere safe.</p><div class="form-actions"><button class="btn primary" id="exportData">⬇ Backup data</button><label class="btn" for="importFile">⬆ Restore backup</label><input id="importFile" type="file" accept="application/json" hidden></div><button class="btn danger" id="clearData" style="margin-top:14px">Clear all app data</button></div>
+  </div>
+  <div class="panel" style="margin-top:14px"><h3>✨ About this app</h3><p class="muted tiny">Bubbles Clinical Life · Version 2.1 · Neon Glass Edition. Data is saved in this browser on this device using local storage. Clearing Chrome site data may erase it, so make backups regularly.</p></div>
+</section>
+<div class="footer">MADE FOR YOUR LEARNING JOURNEY · BUBBLES CLINICAL LIFE 2.1</div>
+</main>
+</div>
+
+<nav class="mobile-nav" id="mobileNav">
+  <button class="active" data-page="dashboard"><span>⌂</span>Home</button><button data-page="study"><span>📚</span>Study</button><button data-page="assignments"><span>📝</span>Tasks</button><button data-page="focus"><span>⏱️</span>Focus</button><button data-page="settings"><span>⚙️</span>Settings</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+const KEY='bubblesClinicalLifeV21';
+const today=()=>new Date().toLocaleDateString('en-CA',{timeZone:'Africa/Dar_es_Salaam'});
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const defaultData={
+ assignments:[],courses:[],notes:[],studyTasks:[],events:[],classes:[],
+ sessions:0,completedStudy:0,completedAssignments:0,
+ wellness:{date:'',water:0,sleep:'',mood:''},reminded:{}
+};
+let data;
+try{data={...defaultData,...JSON.parse(localStorage.getItem(KEY)||'{}')};}catch(e){data={...defaultData};}
+for(const k of Object.keys(defaultData)){if(data[k]===undefined)data[k]=defaultData[k];}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));renderAll();}
+function toast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2600);}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));const labels={dashboard:'Welcome back ✨',study:'Study planner',timetable:'Weekly timetable',calendar:'Smart calendar',assignments:'Assignment manager',gpa:'GPA calculator',focus:'Focus timer',notes:'My notes',health:'Health & wellness',reports:'Weekly reports',settings:'Settings'};document.getElementById('pageHeading').textContent=labels[name]||'Bubbles Clinical Life';window.scrollTo({top:0,behavior:'smooth'});}
+document.addEventListener('click',e=>{const p=e.target.closest('[data-page],[data-go]');if(!p)return;showPage(p.dataset.page||p.dataset.go);});
+function dateLabel(s){if(!s)return 'No date';return new Date(s+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function isPast(d){return d<today();}
+function renderDashboard(){
+ document.getElementById('statAssignments').textContent=data.assignments.filter(a=>!a.done).length;
+ document.getElementById('statSessions').textContent=data.sessions;
+ document.getElementById('statNotes').textContent=data.notes.length;
+ document.getElementById('statGpa').textContent=calcGpa()||'—';
+ const upcoming=[...data.assignments].filter(a=>!a.done).sort((a,b)=>a.due.localeCompare(b.due)).slice(0,4);
+ document.getElementById('dashboardAssignments').innerHTML=upcoming.length?upcoming.map(a=>`<div class="list-item"><div><strong>${esc(a.title)}</strong><small>${esc(a.subject)} · Due ${dateLabel(a.due)}</small></div><span class="tag">${esc(a.priority)}</span></div>`).join(''):'<div class="empty">No pending assignments. Add a task when you need to.</div>';
+ const tasks=data.studyTasks.filter(t=>t.date===today()&&!t.done);
+ document.getElementById('todayFocus').innerHTML=tasks.length?tasks.slice(0,3).map(t=>`<div class="list-item"><div><strong>${esc(t.topic)}</strong><small>${esc(t.subject)} · ${t.duration} min</small></div><span class="tag">Today</span></div>`).join(''):'<div class="empty">No study task planned for today.</div>';
+}
+function renderStudy(){document.getElementById('studyCount').textContent=data.studyTasks.length+' tasks';document.getElementById('studyList').innerHTML=data.studyTasks.length?data.studyTasks.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(t=>`<div class="list-item"><div><strong>${esc(t.topic)}</strong><small>${esc(t.subject)} · ${dateLabel(t.date)} · ${t.duration} min</small></div><div class="form-actions"><button class="btn small" data-study-done="${t.id}">${t.done?'Undo':'Complete'}</button><button class="btn small danger" data-study-delete="${t.id}">Delete</button></div></div>`).join(''):'<div class="empty">No study tasks yet.</div>';}
+function renderTimetable(){document.getElementById('timetableBody').innerHTML=data.classes.length?data.classes.slice().sort((a,b)=>['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].indexOf(a.day)-['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].indexOf(b.day)||a.start.localeCompare(b.start)).map(c=>`<tr><td>${esc(c.day)}</td><td>${esc(c.name)}</td><td>${esc(c.start)}–${esc(c.end)}</td><td><button class="btn small danger" data-class-delete="${c.id}">Delete</button></td></tr>`).join(''):'<tr><td colspan="4" class="muted">No classes added yet.</td></tr>';}
+function renderEvents(){const arr=data.events.slice().sort((a,b)=>a.date.localeCompare(b.date));document.getElementById('eventList').innerHTML=arr.length?arr.map(v=>`<div class="list-item"><div><strong>${esc(v.title)}</strong><small>${dateLabel(v.date)} ${v.time?'· '+esc(v.time):''} · ${esc(v.type)}</small></div><button class="btn small danger" data-event-delete="${v.id}">Delete</button></div>`).join(''):'<div class="empty">No events saved yet.</div>';}
+function renderAssignments(){document.getElementById('assignmentCount').textContent=data.assignments.length+' tasks';document.getElementById('assignmentList').innerHTML=data.assignments.length?data.assignments.slice().sort((a,b)=>a.due.localeCompare(b.due)).map(a=>`<div class="list-item"><div><strong style="${a.done?'text-decoration:line-through;opacity:.6':''}">${esc(a.title)}</strong><small>${esc(a.subject)} · Due ${dateLabel(a.due)} ${isPast(a.due)&&!a.done?'· Overdue':''}</small></div><div class="form-actions"><span class="tag">${a.done?'Done':esc(a.priority)}</span><button class="btn small" data-assignment-done="${a.id}">${a.done?'Undo':'Done'}</button><button class="btn small danger" data-assignment-delete="${a.id}">Delete</button></div></div>`).join(''):'<div class="empty">No assignments added yet.</div>';}
+function calcGpa(){const credits=data.courses.reduce((s,c)=>s+Number(c.credits),0);if(!credits)return '';return (data.courses.reduce((s,c)=>s+Number(c.point)*Number(c.credits),0)/credits).toFixed(2);}
+function renderGpa(){document.getElementById('gpaValue').textContent=calcGpa()||'—';document.getElementById('gpaExplain').textContent=data.courses.length?`${data.courses.length} course(s) · ${data.courses.reduce((s,c)=>s+Number(c.credits),0)} total credits. Confirm your institution's grading scale.`:'GPA = total (grade point × credits) ÷ total credits.';document.getElementById('gpaBody').innerHTML=data.courses.length?data.courses.map(c=>`<tr><td>${esc(c.name)}</td><td>${c.point}</td><td>${c.credits}</td><td><button class="btn small danger" data-course-delete="${c.id}">Delete</button></td></tr>`).join(''):'<tr><td colspan="4" class="muted">Add your first course above.</td></tr>';}
+function renderNotes(){document.getElementById('noteCount').textContent=data.notes.length+' notes';document.getElementById('notesList').innerHTML=data.notes.length?data.notes.slice().reverse().map(n=>`<div class="note-card"><h4>${esc(n.title)}</h4><div class="muted tiny">${esc(n.subject||'General')} · ${dateLabel(n.date)}</div><p>${esc(n.content)}</p><button class="btn small danger" data-note-delete="${n.id}">Delete note</button></div>`).join(''):'<div class="empty">Your saved notes will appear here.</div>';}
+function renderWellness(){if(data.wellness.date!==today())data.wellness={date:today(),water:0,sleep:'',mood:''};document.getElementById('waterCount').textContent=data.wellness.water||0;document.getElementById('waterProgress').style.width=Math.min(100,(data.wellness.water||0)/8*100)+'%';document.getElementById('sleepHours').value=data.wellness.sleep||'';document.getElementById('sleepSaved').textContent=data.wellness.sleep?`Saved today: ${data.wellness.sleep} hours.`:'No sleep entry today.';document.getElementById('moodSelect').value=data.wellness.mood||'Good';document.getElementById('moodSaved').textContent=data.wellness.mood?`Today's mood: ${data.wellness.mood}.`:'No mood entry today.';}
+function renderReports(){document.getElementById('reportStudy').textContent=data.completedStudy;document.getElementById('reportFocus').textContent=data.sessions;document.getElementById('reportAssignments').textContent=data.completedAssignments;document.getElementById('reportNotes').textContent=data.notes.length;const total=data.completedStudy+data.sessions+data.completedAssignments;document.getElementById('reportSummary').textContent=total?`You have recorded ${total} completed learning and task activities, ${data.sessions} focus sessions and ${data.notes.length} saved notes. Keep building your routine one step at a time.`:'Your activity will appear here as you use the app.';document.getElementById('reportProgress').style.width=Math.min(100,total*5)+'%';}
+function renderAll(){renderDashboard();renderStudy();renderTimetable();renderEvents();renderAssignments();renderGpa();renderNotes();renderWellness();renderReports();updateNotificationStatus();}
+document.getElementById('studyForm').addEventListener('submit',e=>{e.preventDefault();data.studyTasks.push({id:uid(),subject:studySubject.value.trim(),topic:studyTopic.value.trim(),date:studyDate.value,duration:Number(studyDuration.value),done:false});e.target.reset();studyDuration.value=60;save();toast('Study task added.');});
+document.getElementById('classForm').addEventListener('submit',e=>{e.preventDefault();data.classes.push({id:uid(),day:classDay.value,name:className.value.trim(),start:classStart.value,end:classEnd.value});e.target.reset();save();toast('Class added.');});
+document.getElementById('eventForm').addEventListener('submit',e=>{e.preventDefault();data.events.push({id:uid(),title:eventTitle.value.trim(),date:eventDate.value,time:eventTime.value,type:eventType.value});e.target.reset();save();toast('Calendar event added.');});
+document.getElementById('assignmentForm').addEventListener('submit',e=>{e.preventDefault();data.assignments.push({id:uid(),title:assignmentTitle.value.trim(),subject:assignmentSubject.value.trim(),due:assignmentDue.value,priority:assignmentPriority.value,done:false});e.target.reset();save();toast('Assignment saved.');});
+document.getElementById('gpaForm').addEventListener('submit',e=>{e.preventDefault();data.courses.push({id:uid(),name:courseName.value.trim(),point:Number(coursePoint.value),credits:Number(courseCredits.value)});e.target.reset();courseCredits.value=3;save();toast('Course added.');});
+document.getElementById('noteForm').addEventListener('submit',e=>{e.preventDefault();data.notes.push({id:uid(),title:noteTitle.value.trim(),subject:noteSubject.value.trim(),content:noteContent.value.trim(),date:today()});e.target.reset();save();toast('Note saved.');});
+document.addEventListener('click',e=>{
+ const b=e.target.closest('button');if(!b)return;
+ const actions=['study-done','study-delete','class-delete','event-delete','assignment-done','assignment-delete','course-delete','note-delete'];
+ for(const action of actions){const id=b.dataset[action];if(!id)continue;
+  if(action==='study-done'){const x=data.studyTasks.find(v=>v.id===id);if(x){x.done=!x.done;if(x.done)data.completedStudy++;else data.completedStudy=Math.max(0,data.completedStudy-1);}}
+  if(action==='study-delete')data.studyTasks=data.studyTasks.filter(v=>v.id!==id);
+  if(action==='class-delete')data.classes=data.classes.filter(v=>v.id!==id);
+  if(action==='event-delete')data.events=data.events.filter(v=>v.id!==id);
+  if(action==='assignment-done'){const x=data.assignments.find(v=>v.id===id);if(x){x.done=!x.done;if(x.done)data.completedAssignments++;else data.completedAssignments=Math.max(0,data.completedAssignments-1);}}
+  if(action==='assignment-delete')data.assignments=data.assignments.filter(v=>v.id!==id);
+  if(action==='course-delete')data.courses=data.courses.filter(v=>v.id!==id);
+  if(action==='note-delete')data.notes=data.notes.filter(v=>v.id!==id);
+  save();toast('Updated.');return;
+ }
+});
+document.getElementById('waterAdd').addEventListener('click',()=>{if(data.wellness.date!==today())data.wellness={date:today(),water:0,sleep:'',mood:''};data.wellness.water=(data.wellness.water||0)+1;save();});
+document.getElementById('waterReset').addEventListener('click',()=>{data.wellness.water=0;save();});
+document.getElementById('saveSleep').addEventListener('click',()=>{const v=Number(sleepHours.value);if(!sleepHours.value||v<0||v>24){toast('Enter a valid number of hours.');return;}data.wellness.sleep=v;save();toast('Sleep entry saved.');});
+document.getElementById('saveMood').addEventListener('click',()=>{data.wellness.mood=moodSelect.value;save();toast('Mood saved.');});
+
+let timerRemaining=25*60,timerInterval=null,timerIsBreak=false;
+function updateTimer(){const m=Math.floor(timerRemaining/60),s=timerRemaining%60;timerDisplay.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');timerMode.textContent=timerIsBreak?'BREAK TIME':'FOCUS SESSION';}
+function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;}}
+timerStart.addEventListener('click',()=>{if(timerInterval)return;timerInterval=setInterval(()=>{timerRemaining--;updateTimer();if(timerRemaining<=0){stopTimer();if(!timerIsBreak){data.sessions++;save();}timerMessage.textContent=timerIsBreak?'Break complete. Ready for another focus session?':'Focus session complete. Take a short break.';toast(timerIsBreak?'Break complete!':'Focus session complete!');if('Notification'in window&&Notification.permission==='granted'){new Notification('Bubbles Clinical Life',{body:timerIsBreak?'Your break is complete.':'Focus session complete. Time for a short break.'});}}},1000);timerMessage.textContent='Timer is running. You can do this.';});
+timerPause.addEventListener('click',()=>{stopTimer();timerMessage.textContent='Timer paused.';});
+timerReset.addEventListener('click',()=>{stopTimer();timerIsBreak=false;timerRemaining=Math.max(1,Number(focusMinutes.value)||25)*60;updateTimer();timerMessage.textContent='Timer reset.';});
+timerSwitch.addEventListener('click',()=>{stopTimer();timerIsBreak=!timerIsBreak;timerRemaining=Math.max(1,Number(timerIsBreak?breakMinutes.value:focusMinutes.value)||5)*60;updateTimer();timerMessage.textContent=timerIsBreak?'Break mode is ready.':'Focus mode is ready.';});
+focusMinutes.addEventListener('change',()=>{if(!timerInterval&&!timerIsBreak){timerRemaining=Math.max(1,Number(focusMinutes.value)||25)*60;updateTimer();}});
+breakMinutes.addEventListener('change',()=>{if(!timerInterval&&timerIsBreak){timerRemaining=Math.max(1,Number(breakMinutes.value)||5)*60;updateTimer();}});
+function updateClock(){const now=new Date();clock.textContent=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Dar_es_Salaam',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(now);todayDate.textContent=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Dar_es_Salaam',weekday:'short',day:'numeric',month:'short',year:'numeric'}).format(now);}
+updateClock();setInterval(updateClock,1000);updateTimer();
+
+const weatherCodes={0:['Clear sky','☀️'],1:['Mainly clear','🌤️'],2:['Partly cloudy','⛅'],3:['Overcast','☁️'],45:['Fog','🌫️'],48:['Rime fog','🌫️'],51:['Light drizzle','🌦️'],53:['Drizzle','🌦️'],55:['Heavy drizzle','🌧️'],61:['Light rain','🌦️'],63:['Rain','🌧️'],65:['Heavy rain','🌧️'],80:['Rain showers','🌦️'],81:['Rain showers','🌧️'],82:['Heavy showers','⛈️'],95:['Thunderstorm','⛈️']};
+async function loadWeather(){weatherDescription.textContent='Loading current weather...';try{const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=-6.1659&longitude=39.2026&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&timezone=Africa%2FDar_es_Salaam');if(!r.ok)throw Error('Weather unavailable');const j=await r.json(),c=j.current,[desc,ico]=weatherCodes[c.weather_code]||['Current conditions','🌤️'];weatherTemp.textContent=Math.round(c.temperature_2m)+'°C';weatherDescription.textContent=desc;weatherExtra.textContent=`Feels ${Math.round(c.apparent_temperature)}°C · Humidity ${c.relative_humidity_2m}% · Wind ${Math.round(c.wind_speed_10m)} km/h`;weatherIcon.textContent=ico;}catch(e){weatherDescription.textContent='Could not load weather. Check internet.';weatherExtra.textContent='You can refresh later.';}}
+refreshWeather.addEventListener('click',loadWeather);loadWeather();
+
+function updateNotificationStatus(){const el=document.getElementById('notificationStatus');if(!('Notification'in window)){el.textContent='This browser does not support web notifications.';return;}el.textContent='Notification permission: '+Notification.permission+(Notification.permission==='granted'?' · Reminders are allowed.':Notification.permission==='denied'?' · Change permission in Chrome site settings.':' · Tap Enable notifications to allow reminders.');}
+async function requestNotificationPermission(){if(!('Notification'in window)){toast('This browser does not support notifications.');return;}try{const permission=await Notification.requestPermission();updateNotificationStatus();toast(permission==='granted'?'Notifications enabled.':'Notification permission was not granted.');if(permission==='granted')sendNotification('Bubbles Clinical Life','Notifications are ready on this device.');}catch(e){toast('Could not request notification permission.');}}
+function sendNotification(title,body){if(!('Notification'in window)||Notification.permission!=='granted')return;try{new Notification(title,{body,tag:'bubbles-'+Date.now()});}catch(e){toast('Notification could not be displayed.');}}
+enableNotificationsButton();
+function enableNotificationsButton(){document.getElementById('enableNotifications').addEventListener('click',requestNotificationPermission);heroNotify.addEventListener('click',requestNotificationPermission);testNotification.addEventListener('click',()=>{if(!('Notification'in window)){toast('Notifications are not supported here.');return;}if(Notification.permission==='granted'){sendNotification('Bubbles Clinical Life','This is a test notification. Your browser notifications are working.');toast('Test notification sent.');}else requestNotificationPermission();});}
+function scheduleNotifications(){if(!('Notification'in window)||Notification.permission!=='granted')return;const now=new Date();const localNow=new Date(now.toLocaleString('en-US',{timeZone:'Africa/Dar_es_Salaam'}));const hour=localNow.getHours();if(hour<7||hour>21)return;const tomorrow=new Date(now.getTime()+86400000).toLocaleDateString('en-CA',{timeZone:'Africa/Dar_es_Salaam'});for(const a of data.assignments){if(a.done)continue;let kind=null;if(a.due===today())kind='today';else if(a.due===tomorrow)kind='tomorrow';if(!kind)continue;const key=`${a.id}_${kind}_${today()}`;if(data.reminded[key])continue;sendNotification(kind==='today'?'Assignment due today':'Assignment due tomorrow',`${a.title} · ${a.subject}`);data.reminded[key]=true;localStorage.setItem(KEY,JSON.stringify(data));}}
+setInterval(scheduleNotifications,60000);scheduleNotifications();
+
+document.getElementById('exportData').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='bubbles-clinical-life-backup.json';a.click();URL.revokeObjectURL(url);toast('Backup downloaded.');});
+document.getElementById('importFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const imported=JSON.parse(await file.text());if(!imported||typeof imported!=='object'||!Array.isArray(imported.assignments)||!Array.isArray(imported.notes))throw Error('Invalid backup');data={...defaultData,...imported};save();toast('Backup restored successfully.');}catch(err){toast('Backup file is invalid.');}e.target.value='';});
+document.getElementById('clearData').addEventListener('click',()=>{if(confirm('Clear all Bubbles Clinical Life data on this browser? Download a backup first if you need it.')){localStorage.removeItem(KEY);data={...defaultData};save();toast('App data cleared.');}});
+renderAll();
+</script>
+</body>
+</html>
